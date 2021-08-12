@@ -24,7 +24,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`bg-primary sticky top-0 border-secondary z-20 ${border}`}>
+    <header className={`bg-primary sticky top-0 border-secondary z-30 ${border}`}>
       <div className='py-2 px-6 grid grid-cols-5 justify-center items-center'>
         <Button
           dataTip='Main menu'

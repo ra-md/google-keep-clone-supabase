@@ -23,7 +23,7 @@ export default function Sidebar() {
   return (
     <>
       <nav
-        className={`fixed top-14 left-0 bottom-0 pt-4 z-10 duration-200 ease-in-out bg-primary ${visibleOnActive || visibleOnHover ? 'w-72' : 'w-16'} ${visibleOnHover ? 'shadow-lg-darker' : ''} ${visibleOnActive ? 'shadow-lg-darker md:shadow-none' : ''}`}
+        className={`fixed top-14 left-0 bottom-0 pt-4 z-20 duration-200 ease-in-out bg-primary ${visibleOnActive || visibleOnHover ? 'w-72' : 'w-16'} ${visibleOnHover ? 'shadow-lg-darker' : ''} ${visibleOnActive ? 'shadow-lg-darker md:shadow-none' : ''}`}
         onMouseEnter={toggle}
         onMouseLeave={toggle}
       >

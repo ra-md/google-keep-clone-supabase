@@ -96,7 +96,7 @@ function SearchLabelItem({ label, noteId }: { label: Label, noteId: string }) {
 		} else {
 			removeLabelMutation.mutate()
 		}
-	}, 1000), [isChecked])
+	}, 500), [isChecked])
 
 	useEffect(() => {
 		if(firstRender.current) {

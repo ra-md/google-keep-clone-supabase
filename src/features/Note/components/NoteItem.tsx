@@ -33,22 +33,22 @@ export default function NoteItem({ note_name, note_text, id, labels }: NoteItemP
           onClick={() => setOpenUpdateNote(true)}
           className='px-4 py-2'
         >
-          <div className='mb-5'>
+          <div className='mb-6'>
             <h2>{note_name}</h2>
             <p>{slicedNote}</p>
           </div>
+          <NoteLabels noteLabels={labels} noteId={id}/>
           <div
-            className={`flex justify-end absolute inset-0 items-end opacity-0 hover:opacity-100 focus:opacity-100 duration-200 ease-in-out`}
+            className={`flex justify-end absolute inset-0 items-end opacity-0 hover:opacity-100 focus:opacity-100 duration-200 ease-in-out mb-0.5 mr-0.5`}
           >
-            <NoteLabels noteLabels={labels} noteId={id}/>
-            <Button icon={true} dataTip='Add label' aria-label='add label' onClick={(e) => {
-              e.stopPropagation()
+            <Button icon={true} dataTip='Add label' aria-label='add label' onClick={(event) => {
+              event.stopPropagation()
               setOpenSearchLabel(true)
             }}>
               <Tag size={17} />
             </Button>
-            <Button icon={true} dataTip='Delete note' aria-label='delete note' onClick={(e) => {
-              e.stopPropagation()
+            <Button icon={true} dataTip='Delete note' aria-label='delete note' onClick={(event) => {
+              event.stopPropagation()
               deleteMutation.mutate()
             }}>
               <Trash2 size={17} />
@@ -62,6 +62,7 @@ export default function NoteItem({ note_name, note_text, id, labels }: NoteItemP
         title={note_name!}
         note={note_text!}
         id={id}
+        labels={labels}
       />
       <SearchLabel noteId={id} visible={openSearchLabel} toggle={() => setOpenSearchLabel(!openSearchLabel)} />
     </>
