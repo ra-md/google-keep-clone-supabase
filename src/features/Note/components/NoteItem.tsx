@@ -47,10 +47,16 @@ export default function NoteItem({ note_name, note_text, id, labels }: NoteItemP
             }}>
               <Tag size={17} />
             </Button>
-            <Button icon={true} dataTip='Delete note' aria-label='delete note' onClick={(event) => {
-              event.stopPropagation()
-              deleteMutation.mutate()
-            }}>
+            <Button
+              icon={true}
+              dataTip='Delete note'
+              aria-label='delete note'
+              isLoading={deleteMutation.isLoading}
+              onClick={(event) => {
+                event.stopPropagation()
+                deleteMutation.mutate()
+              }}
+            >
               <Trash2 size={17} />
             </Button>
           </div>

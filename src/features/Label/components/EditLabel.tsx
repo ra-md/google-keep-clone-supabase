@@ -39,36 +39,36 @@ export default function EditLabel({ visible, toggle }: EditLabelProps) {
     <Modal visible={visible} toggle={toggle} width='w-96'>
       {isLoading && <Spinner/> }
       { data != null && <div className='max-h-lg overflow-y-auto'>
-            <div className='p-3'>
-              <span className='font-semibold'>Edit labels</span>
-              <div className='flex items-center'>
-                <Button icon={true}>
-                  <X size={iconSize} />
-                </Button>
-                <Input
-                  placeholder='Create new label'
-                  className='border-b border-secondary py-1 mx-3'
-                  value={labelName}
-                  onChange={(event) => setLabelName(event.target.value)}
-                  onKeyDown={(event) => {
-                    if(event.key === 'Enter') {
-                      handleCreateNote()
-                    }
-                  }}
-                />
-                <Button icon={true} isLoading={labelMutation.isLoading} onClick={handleCreateNote}>
-                  <Check size={iconSize} />
-                </Button>
-              </div>
-              <EditLabelList labels={data} />
+          <div className='p-3'>
+            <span className='font-semibold'>Edit labels</span>
+            <div className='flex items-center'>
+              <Button icon={true} onClick={() => setLabelName('')}>
+                <X size={iconSize} />
+              </Button>
+              <Input
+                placeholder='Create new label'
+                className='border-b border-secondary py-1 mx-3'
+                value={labelName}
+                onChange={(event) => setLabelName(event.target.value)}
+                onKeyDown={(event) => {
+                  if(event.key === 'Enter') {
+                    handleCreateNote()
+                  }
+                }}
+              />
+              <Button icon={true} isLoading={labelMutation.isLoading} onClick={handleCreateNote}>
+                <Check size={iconSize} />
+              </Button>
             </div>
-            <div
-              className='border-t border-secondary rounded-b-lg sticky bg-primary bottom-0 left-0 right-0 flex justify-end p-3'
-              onClick={toggle}
-            >
-              <Button>Done</Button>
-            </div>
+            <EditLabelList labels={data} />
           </div>
+          <div
+            className='border-t border-secondary rounded-b-lg sticky bg-primary bottom-0 left-0 right-0 flex justify-end p-3'
+            onClick={toggle}
+          >
+            <Button>Close</Button>
+          </div>
+        </div>
       }
     </Modal>
   )
