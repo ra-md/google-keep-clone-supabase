@@ -45,6 +45,7 @@ export async function createNote(noteData: CreateNoteData) {
 }
 
 export async function deleteNote(noteId: string) {
+  await supabase.from('note_labels').delete().eq('note_id', noteId)
   const {data, error} = await supabase.from<Note>('notes').delete().eq('id', noteId)
 
   if(error) {

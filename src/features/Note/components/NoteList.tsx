@@ -10,7 +10,7 @@ interface NoteListProps {
 export default function NoteList({ notes }: NoteListProps) {
 
   if (notes.length === 0) {
-    return <h1 className='text-center'>Notes you add appear here</h1>
+    return <h1 className='text-center mt-8'>Notes you add appear here</h1>
   }
 
   return (
