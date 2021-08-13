@@ -6,6 +6,7 @@ import Sidebar from '../components/Sidebar'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Home from '../pages/Home'
 import Search from '../pages/Search'
+import NotesLabel from '../features/Label/pages/NotesLabel'
 
 export default function Protected() {
   const [visible] = useAtom(sidebarAtom)
@@ -18,6 +19,9 @@ export default function Protected() {
         <Switch>
           <Route exact path='/'>
             <Home />
+          </Route>
+          <Route exact path='/:labelName'>
+            <NotesLabel/>
           </Route>
           <Route exact path='/search'>
             <Search />

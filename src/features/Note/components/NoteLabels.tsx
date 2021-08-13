@@ -33,7 +33,7 @@ function NoteLabelsItem(props: Label&{noteId: string}) {
 	const deleteLabelMutation = useMutation(() => removeLabel({labelId: props.id, noteId: props.noteId}), {
 		onSuccess() {
 			queryClient.invalidateQueries({
-				predicate: query => query.queryKey === 'notes' || query.queryKey === 'labels'
+				predicate: query => query.queryKey === 'notes' || query.queryKey === 'labels' || query.queryKey === 'notesbylabel'
 			})
 		}
 	})
@@ -49,8 +49,12 @@ function NoteLabelsItem(props: Label&{noteId: string}) {
 							<button
 								className='p-0.5 mr-0.5 bg-primary rounded-full shadow-lg hover:bg-hover'
 								aria-label='remove label'
+								onClick={(event) => {
+									event.stopPropagation()
+									deleteLabelMutation.mutate()
+								}}
 							>
-								<X size={14} onClick={() => deleteLabelMutation.mutate()}/>
+								<X size={14}/>
 							</button>
 						</div>
 					</div>

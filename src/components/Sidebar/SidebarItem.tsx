@@ -21,7 +21,7 @@ export default function SidebarItem(props: SidebarItemProps) {
 	return (
 		<li
 			onClick={props.onClick}
-			className={`flex overflow-hidden duration-200 ease-in-out rounded-full p-3 font-semibold cursor-pointer ${visible || visibleOnHover ? 'rounded-l-none pl-8 w-full' : 'ml-5 w-12'} ${isActive ? 'bg-activeSidebarMenu' : 'hover:bg-secondary'}`}
+			className={`flex whitespace-nowrap overflow-hidden duration-200 ease-in-out rounded-full p-3 font-semibold cursor-pointer ${visible || visibleOnHover ? 'rounded-l-none pl-8 w-full' : 'ml-5 w-12'} ${isActive ? 'bg-activeSidebarMenu' : 'hover:bg-secondary'}`}
 		>
 			{
 				props.route

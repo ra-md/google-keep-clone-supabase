@@ -49,7 +49,7 @@ export default function Sidebar() {
               key={label.id}
               icon={<Tag/>}
               name={label.label_name}
-              route="/search"
+              route={`/${label.label_name}`}
             />)
           }
           <SidebarItem

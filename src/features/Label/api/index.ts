@@ -1,11 +1,28 @@
 import {supabase} from '~/lib/supabaseClient'
 import {Label, NoteLabel} from '../types'
+import {Note} from '../../Note/types'
 
 export async function getLabels() {
 	const {data, error} = await supabase.from<Label>('labels').select(`
 		*,
 		notes(id)
 	`)
+
+	if(error) {
+    throw new Error(error.message)
+	}
+
+	return data
+}
+
+export async function getNotesByLabel(labelName: string) {
+	const {data, error} = await supabase
+		.from<Label&{notes: Note[]}>('labels')
+		.select(`
+			*,
+			notes(*, labels(*))
+		`)
+		.eq('label_name', labelName)
 
 	if(error) {
     throw new Error(error.message)
