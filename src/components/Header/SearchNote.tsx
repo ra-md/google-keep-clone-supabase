@@ -11,7 +11,7 @@ export default function SearchNote() {
     const value = searchRef.current?.value
 
     if (event.key === 'Enter' && value !== '') {
-      history.push(`/search?query=${value}`)
+      history.push(`/search/${value}`)
     }
   }
 

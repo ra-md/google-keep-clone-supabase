@@ -5,7 +5,8 @@ import { useAtom } from 'jotai'
 import Sidebar from '../components/Sidebar'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Home from '../pages/Home'
-import Search from '../pages/Search'
+import Search from '../features/Note/pages/Search'
+import NotesLabel from '../features/Label/pages/NotesLabel'
 
 export default function Protected() {
   const [visible] = useAtom(sidebarAtom)
@@ -19,8 +20,11 @@ export default function Protected() {
           <Route exact path='/'>
             <Home />
           </Route>
-          <Route exact path='/search'>
+          <Route exact path='/search/:query'>
             <Search />
+          </Route>
+          <Route exact path='/label/:labelName'>
+            <NotesLabel/>
           </Route>
           <Route path='*'>
             <h1>404</h1>

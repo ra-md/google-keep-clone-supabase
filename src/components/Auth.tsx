@@ -2,6 +2,7 @@ import React, {useState, MouseEvent, useEffect} from 'react'
 import Input from './Input'
 import Button from './Button'
 import {supabase} from '../lib/supabaseClient'
+import {toast} from 'react-toastify'
 
 export default function Auth() {
 	const [isLoginForm, setIsLoginForm] = useState(true)
@@ -9,6 +10,7 @@ export default function Auth() {
 	const [password, setPassword] = useState('')
 	const [invalid, setInvalid] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState<string|null>(null)
 
 	async function handleAuth(event: MouseEvent<HTMLButtonElement>) {
 		event.preventDefault()
@@ -20,21 +22,30 @@ export default function Auth() {
 
 		setIsLoading(true)
 
-		try {
-			if(isLoginForm) {
-				await supabase.auth.signIn({email, password})
-			} else {
-				await supabase.auth.signUp({email, password})
+		if(isLoginForm) {
+			const {error} = await supabase.auth.signIn({email, password})
+
+			if(error) {
+				setError(error.message)
 			}
-		} catch (error) {
-			console.log(error)
+
+			setIsLoading(false)
+		} else {
+			const {error} = await supabase.auth.signUp({email, password})
+
+			if(error) {
+				setError(error.message)
+			} else {
+				toast.dark('Check your email')
+			}
+
 			setIsLoading(false)
 		}
-
 	}
 
 	useEffect(() => {
 		setInvalid(false)
+		setError(null)
 	}, [email, password, isLoginForm])
 
 	return (
@@ -59,6 +70,9 @@ export default function Auth() {
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
+				{
+					error && <p className='text-center text-red-500'>{error}</p>
+				}
 				<Button
 					aria-label={isLoginForm ? 'Login' : 'Register'}
 					type='submit'

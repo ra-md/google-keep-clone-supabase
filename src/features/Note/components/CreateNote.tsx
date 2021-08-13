@@ -54,7 +54,7 @@ export default function CreateNote(props: CreateNoteProps) {
 			<div
 				ref={wrapperRef}
 				onFocus={() => setVisible(true)}
-				className='border border-secondary rounded-lg shadow-lg-darker w-full my-8 md:w-screen md:max-w-xl'
+				className='border border-secondary rounded-lg shadow-lg-darker w-full mt-8 md:w-screen md:max-w-xl'
 			>
 				<div className='py-2 px-4 flex flex-col'>
 					{

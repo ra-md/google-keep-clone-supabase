@@ -5,6 +5,8 @@ import Modal from '~/components/Modal'
 import Button from '~/components/Button'
 import {useMutation, useQueryClient} from 'react-query'
 import {updateNote} from '../api'
+import NoteLabels from './NoteLabels'
+import {Label} from '../../Label/types'
 
 interface UpdateNoteProps {
   visible: boolean
@@ -12,6 +14,7 @@ interface UpdateNoteProps {
   title: string
   note: string
   id: string
+  labels: Label[]
 }
 
 export default function UpdateNote(props: UpdateNoteProps) {
@@ -46,18 +49,26 @@ export default function UpdateNote(props: UpdateNoteProps) {
     <Modal toggle={handleUpdate} visible={props.visible}>
       <div className='p-3'>
         <Input
-          onChange={e => setTitle(e.target.value)}
+          onChange={event => setTitle(event.target.value)}
           value={title}
           placeholder='Title'
         />
         <TextareaAutoSize
-          onChange={e => setNote(e.target.value)}
+          onChange={event => setNote(event.target.value)}
           value={note}
           className='textarea max-h-96'
           placeholder='Take a note...'
         />
-        <div className='flex justify-end'>
-          <Button size='small' aria-label='close update note dialog' onClick={handleUpdate}>Close</Button>
+        <div className='flex items-center'>
+          <NoteLabels noteLabels={props.labels} noteId={props.id} full={true}/>
+          <Button
+            className='ml-auto'
+            size='small'
+            aria-label='close update note dialog'
+            onClick={handleUpdate}
+          >
+            Close
+          </Button>
         </div>
       </div>
     </Modal>

@@ -28,6 +28,7 @@ textarea {
 
 .note-list {
   overflow: hidden;
+  @apply mt-8;
 }
 
 .textarea {

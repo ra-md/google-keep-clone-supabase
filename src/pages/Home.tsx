@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <CreateNote />
-      {isLoading && <Spinner/>}
+      {isLoading && <div className='mt-8'><Spinner/></div>}
       {data != null && <NoteList notes={data} />}
     </>
   )

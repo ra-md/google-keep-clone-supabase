@@ -19,6 +19,21 @@ export async function getNotes() {
   return data
 }
 
+export async function searchNotes(searchValue: string) {
+  const {data, error} = await supabase.from<Note>('notes')
+    .select(`
+      *,
+      labels(*)
+    `)
+    .or(`note_text.ilike.%${searchValue}%, note_name.ilike.%${searchValue}%`)
+
+  if(error) {
+    throw new Error(error.message)
+  }
+
+  return data
+}
+
 export async function createNote(noteData: CreateNoteData) {
 	const {data, error} = await supabase.from<Note>('notes').insert({creator_id: getUserId(), ...noteData})
 
@@ -30,6 +45,7 @@ export async function createNote(noteData: CreateNoteData) {
 }
 
 export async function deleteNote(noteId: string) {
+  await supabase.from('note_labels').delete().eq('note_id', noteId)
   const {data, error} = await supabase.from<Note>('notes').delete().eq('id', noteId)
 
   if(error) {
