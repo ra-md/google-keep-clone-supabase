@@ -31,6 +31,21 @@ export async function getNotesByLabel(labelName: string) {
 	return data
 }
 
+export async function searchLabels(searchValue: string) {
+  const {data, error} = await supabase.from<Label>('labels')
+    .select(`
+      *,
+      notes(*, labels(*))
+    `)
+    .ilike('label_name', `%${searchValue}%`)
+
+  if(error) {
+    throw new Error(error.message)
+  }
+
+  return data
+}
+
 export async function createLabel(labelName: string) {
 	const user = supabase.auth.user()
 	const {data, error} = await supabase.from<Label>('labels').insert({creator_id: user?.id, label_name: labelName})

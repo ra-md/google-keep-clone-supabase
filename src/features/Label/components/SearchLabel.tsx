@@ -5,9 +5,10 @@ import Input from '~/components/Input'
 import Spinner from '~/components/Spinner'
 import { Plus, Search } from 'react-feather'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { getLabels, addLabel, removeLabel } from '../api'
+import { getLabels, addLabel, removeLabel, searchLabels } from '../api'
 import { Label } from '../types'
 import debounce from 'lodash/debounce'
+import {PostgrestError} from '@supabase/supabase-js'
 
 interface SearchLabelProps {
 	visible: boolean
@@ -15,45 +16,57 @@ interface SearchLabelProps {
 	noteId: string
 }
 
+type getLabelsType = Label[] | null | undefined
+type getLabelsErrorType = PostgrestError | null
+
 export default function SearchLabel(props: SearchLabelProps) {
-	const { data, isLoading, isError, error } = useQuery<any, any>('labels', getLabels, {
+	const [searchValue, setSearchValue] = useState('')
+	const queryClient = useQueryClient()
+	const getLabelsQuery = useQuery<getLabelsType, getLabelsErrorType>('labels', getLabels, {
 		staleTime: Infinity
 	})
+	const searchLabelMutation = useMutation(() => searchLabels(searchValue))
 
-	const [searchValue, setSearchValue] = useState('')
+	const labels = searchValue !== '' && searchLabelMutation.isSuccess
+		? searchLabelMutation.data
+		: getLabelsQuery.data
+
+	useEffect(() => {
+		if(searchValue === '') {
+			searchLabelMutation.reset()
+		}
+	}, [searchValue])
 
 	return (
 		<Modal visible={props.visible} toggle={props.toggle} width='w-72'>
 			<div className='p-3 sticky top-0 rounded-lg bg-primary'>
 				<span className='font-semibold'>Label note</span>
 				<div className='flex items-center'>
-					<Input className='font-normal' placeholder='Search label name' value={searchValue} onChange={(event) => {
-						setSearchValue(event.target.value)
-					}} />
+					<Input
+						className='font-normal'
+						placeholder='Search label name'
+						value={searchValue}
+						onChange={(event) => {
+							setSearchValue(event.target.value)
+						}}
+						onKeyDown={(event) => {
+							if(event.key === 'Enter' && searchValue !== '') {
+								searchLabelMutation.mutate()
+							}
+						}}
+					/>
 					<Search size={18} />
 				</div>
 			</div>
 			{
-				isError && <p className='text-center p-3 text-red-500'>{error.message}</p>
+				getLabelsQuery.isError && <p className='text-center p-3 text-red-500'>{getLabelsQuery.error?.message}</p>
 			}
 			{
-				isLoading && <div className='flex justify-center p-3'><Spinner /></div>
-			}
-			{
-				data != null &&
-				<>
-					<div className='px-3 max-h-96 overflow-y-auto'>
-						<SearchLabelList labels={data} noteId={props.noteId} />
-					</div>
-					{
-						data.length === 0 && searchValue !== '' && <div className='border-t border-secondary p-2 break-all'>
-							<Button size='small' className='flex items-center justify-center'>
-								<Plus size={18} />
-								<span className='ml-2'>Create "{searchValue}"</span>
-							</Button>
+				getLabelsQuery.isLoading || searchLabelMutation.isLoading
+					? <div className='flex justify-center p-3'><Spinner /></div>
+					: <div className='px-3 max-h-96 overflow-y-auto'>
+							{ labels != null && <SearchLabelList labels={labels} noteId={props.noteId} /> }
 						</div>
-					}
-				</>
 			}
 		</Modal>
 	)
