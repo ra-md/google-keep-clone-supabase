@@ -1,5 +1,5 @@
-import {supabase} from '~/lib/supabaseClient'
-import {Note, CreateNoteData} from '../types'
+import { supabase } from '~/lib/supabaseClient'
+import { Note, CreateNoteData } from '../types'
 
 function getUserId() {
   const user = supabase.auth.user()
@@ -7,12 +7,12 @@ function getUserId() {
 }
 
 export async function getNotes() {
-	const {data, error} = await supabase.from<Note>('notes').select(`
+  const { data, error } = await supabase.from<Note>('notes').select(`
     *,
     labels(*)
   `)
 
-	if(error) {
+  if (error) {
     throw new Error(error.message)
   }
 
@@ -20,14 +20,14 @@ export async function getNotes() {
 }
 
 export async function searchNotes(searchValue: string) {
-  const {data, error} = await supabase.from<Note>('notes')
+  const { data, error } = await supabase.from<Note>('notes')
     .select(`
       *,
       labels(*)
     `)
     .or(`note_text.ilike.%${searchValue}%, note_name.ilike.%${searchValue}%`)
 
-  if(error) {
+  if (error) {
     throw new Error(error.message)
   }
 
@@ -35,9 +35,9 @@ export async function searchNotes(searchValue: string) {
 }
 
 export async function createNote(noteData: CreateNoteData) {
-	const {data, error} = await supabase.from<Note>('notes').insert({creator_id: getUserId(), ...noteData})
+  const { data, error } = await supabase.from<Note>('notes').insert({ creator_id: getUserId(), ...noteData })
 
-	if(error) {
+  if (error) {
     throw new Error(error.message)
   }
 
@@ -46,19 +46,19 @@ export async function createNote(noteData: CreateNoteData) {
 
 export async function deleteNote(noteId: string) {
   await supabase.from('note_labels').delete().eq('note_id', noteId)
-  const {data, error} = await supabase.from<Note>('notes').delete().eq('id', noteId)
+  const { data, error } = await supabase.from<Note>('notes').delete().eq('id', noteId)
 
-  if(error) {
+  if (error) {
     throw new Error(error.message)
   }
 
   return data
 }
 
-export async function updateNote({noteData, id}: {noteData: CreateNoteData, id: string}) {
-  const {data, error} = await supabase.from<Note>('notes').update(noteData).eq('id', id)
+export async function updateNote({ noteData, id }: { noteData: CreateNoteData, id: string }) {
+  const { data, error } = await supabase.from<Note>('notes').update(noteData).eq('id', id)
 
-  if(error) {
+  if (error) {
     throw new Error(error.message)
   }
 

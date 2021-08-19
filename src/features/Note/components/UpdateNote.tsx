@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import TextareaAutoSize from 'react-textarea-autosize'
+import { useMutation, useQueryClient } from 'react-query'
+import { Dialog } from '@headlessui/react'
 import Input from '~/components/Input'
 import Modal from '~/components/Modal'
 import Button from '~/components/Button'
-import {useMutation, useQueryClient} from 'react-query'
-import {updateNote} from '../api'
+import { updateNote } from '../api'
 import NoteLabels from './NoteLabels'
-import {Label} from '../../Label/types'
+import { Label } from '../../Label/types'
 
 interface UpdateNoteProps {
   visible: boolean
@@ -22,7 +23,7 @@ export default function UpdateNote(props: UpdateNoteProps) {
   const [title, setTitle] = useState('')
   const [note, setNote] = useState('')
   const updateMutation = useMutation(() => updateNote({
-    noteData: { 
+    noteData: {
       note_name: title,
       note_text: note,
     },
@@ -40,36 +41,38 @@ export default function UpdateNote(props: UpdateNoteProps) {
 
   function handleUpdate() {
     props.toggle()
-    if(title !== props.title || note !== props.note) {
+    if (title !== props.title || note !== props.note) {
       updateMutation.mutate()
     }
   }
 
   return (
-    <Modal toggle={handleUpdate} visible={props.visible}>
-      <div className='p-3'>
-        <Input
-          onChange={event => setTitle(event.target.value)}
-          value={title}
-          placeholder='Title'
-        />
-        <TextareaAutoSize
-          onChange={event => setNote(event.target.value)}
-          value={note}
-          className='textarea max-h-96'
-          placeholder='Take a note...'
-        />
-        <div className='flex items-center'>
-          <NoteLabels noteLabels={props.labels} noteId={props.id} full={true}/>
-          <Button
-            className='ml-auto'
-            size='small'
-            aria-label='close update note dialog'
-            onClick={handleUpdate}
-          >
-            Close
-          </Button>
-        </div>
+    <Modal
+      visible={props.visible}
+      toggle={props.toggle}
+    >
+      <Input
+        onChange={event => setTitle(event.target.value)}
+        value={title}
+        placeholder='Title'
+      />
+      <TextareaAutoSize
+        onChange={event => setNote(event.target.value)}
+        value={note}
+        className='textarea max-h-96'
+        placeholder='Take a note...'
+      />
+
+      <div className='flex items-center mt-2'>
+        <NoteLabels noteLabels={props.labels} noteId={props.id} full={true} />
+        <Button
+          className='ml-auto'
+          size='small'
+          aria-label='close update note dialog'
+          onClick={handleUpdate}
+        >
+          Close
+        </Button>
       </div>
     </Modal>
   )

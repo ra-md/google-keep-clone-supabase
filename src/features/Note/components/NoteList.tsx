@@ -1,7 +1,7 @@
 import React from 'react'
 import Masonry from 'react-masonry-component'
 import NoteItem from './NoteItem'
-import {Note} from '../types'
+import { Note } from '../types'
 
 interface NoteListProps {
   notes: Note[]

@@ -1,4 +1,4 @@
-import {Label} from '../../Label/types'
+import { Label } from '../../Label/types'
 
 export interface Note {
 	id: string

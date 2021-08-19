@@ -5,11 +5,12 @@ import UpdateNote from './UpdateNote'
 import SearchLabel from '~/features/Label/components/SearchLabel'
 import { toast } from 'react-toastify'
 import { Note } from '../types'
-import {useMutation, useQueryClient} from 'react-query'
-import {deleteNote} from '../api'
+import { useMutation, useQueryClient } from 'react-query'
+import { deleteNote } from '../api'
 import NoteLabels from './NoteLabels'
+import clsx from 'clsx'
 
-interface NoteItemProps extends Note {}
+interface NoteItemProps extends Note { }
 
 export default function NoteItem({ note_name, note_text, id, labels }: NoteItemProps) {
   const queryClient = useQueryClient()
@@ -27,7 +28,10 @@ export default function NoteItem({ note_name, note_text, id, labels }: NoteItemP
   return (
     <>
       <li
-        className={`border relative border-secondary rounded-lg mb-5 bg-primary break-words w-full md:w-60 ${openUpdateNote ? 'opacity-0' : ''}`}
+        className={clsx(
+          'border relative border-secondary rounded-lg mb-5 bg-primary break-words w-full md:w-60',
+          openUpdateNote && 'opacity-0'
+        )}
       >
         <div
           onClick={() => setOpenUpdateNote(true)}
@@ -37,18 +41,16 @@ export default function NoteItem({ note_name, note_text, id, labels }: NoteItemP
             <h2>{note_name}</h2>
             <p>{slicedNote}</p>
           </div>
-          <NoteLabels noteLabels={labels} noteId={id}/>
+          <NoteLabels noteLabels={labels} noteId={id} />
           <div
             className={`flex justify-end absolute inset-0 items-end opacity-0 hover:opacity-100 focus:opacity-100 duration-200 ease-in-out mb-0.5 mr-0.5`}
           >
-            <Button icon={true} dataTip='Add label' aria-label='add label' onClick={(event) => {
+            <Button icon={<Tag size={17} />} dataTip='Add label' aria-label='add label' onClick={(event) => {
               event.stopPropagation()
               setOpenSearchLabel(true)
-            }}>
-              <Tag size={17} />
-            </Button>
+            }}></Button>
             <Button
-              icon={true}
+              icon={<Trash2 size={17} />}
               dataTip='Delete note'
               aria-label='delete note'
               isLoading={deleteMutation.isLoading}
@@ -56,9 +58,7 @@ export default function NoteItem({ note_name, note_text, id, labels }: NoteItemP
                 event.stopPropagation()
                 deleteMutation.mutate()
               }}
-            >
-              <Trash2 size={17} />
-            </Button>
+            ></Button>
           </div>
         </div>
       </li>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Menu, LogOut } from 'react-feather'
-import { sidebarAtom } from '../Sidebar/sidebarAtom'
-import Button from '../Button'
-import SearchNote from './SearchNote'
+import { sidebarAtom } from './Sidebar/sidebarAtom'
+import Button from './Button'
+import SearchNote from '../features/Note/components/SearchNote'
 import { useAtom } from 'jotai'
-import {supabase} from '../../lib/supabaseClient'
+import { supabase } from '../lib/supabaseClient'
 
 export default function Header() {
   const [openSidebar, setOpenSidebar] = useAtom(sidebarAtom)
@@ -33,26 +33,22 @@ export default function Header() {
         <div className='py-2 px-6 grid grid-cols-5 justify-center items-center'>
           <Button
             dataTip='Main menu'
-            icon={true}
+            icon={<Menu />}
             className='justify-self-start'
             aria-label='open menu'
             onClick={() => {
               setOpenSidebar(!openSidebar)
-            }}>
-            <Menu />
-          </Button>
+            }}></Button>
           <div className='col-span-3'>
             <SearchNote />
           </div>
           <Button
             dataTip='Log Out'
-            icon={true}
+            icon={<LogOut />}
             className='justify-self-end'
             aria-label='LogOut'
             onClick={handleLogout}
-          >
-            <LogOut />
-          </Button>
+          ></Button>
         </div>
       </header>
     </>

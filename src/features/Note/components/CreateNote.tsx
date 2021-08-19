@@ -59,13 +59,13 @@ export default function CreateNote(props: CreateNoteProps) {
 				<div className='py-2 px-4 flex flex-col'>
 					{
 						visible && <Input
-							onChange={e => setTitle(e.target.value)}
+							onChange={event => setTitle(event.target.value)}
 							value={title}
 							placeholder='Title'
 						/>
 					}
 					<TextareaAutoSize
-						onChange={e => setNote(e.target.value)}
+						onChange={event => setNote(event.target.value)}
 						value={note}
 						className='textarea'
 						placeholder='Take a note...'

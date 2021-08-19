@@ -1,4 +1,4 @@
-import {Note} from '../../Note/types'
+import { Note } from '../../Note/types'
 
 export interface Label {
 	id: string

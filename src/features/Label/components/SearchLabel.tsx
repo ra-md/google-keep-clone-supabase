@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react'
 import Modal from '~/components/Modal'
-import Button from '~/components/Button'
 import Input from '~/components/Input'
 import Spinner from '~/components/Spinner'
-import { Plus, Search } from 'react-feather'
+import { Search } from 'react-feather'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { getLabels, addLabel, removeLabel, searchLabels } from '../api'
 import { Label } from '../types'
 import debounce from 'lodash/debounce'
-import {PostgrestError} from '@supabase/supabase-js'
+import { PostgrestError } from '@supabase/supabase-js'
+import {Dialog} from '@headlessui/react'
 
 interface SearchLabelProps {
 	visible: boolean
@@ -21,7 +21,6 @@ type getLabelsErrorType = PostgrestError | null
 
 export default function SearchLabel(props: SearchLabelProps) {
 	const [searchValue, setSearchValue] = useState('')
-	const queryClient = useQueryClient()
 	const getLabelsQuery = useQuery<getLabelsType, getLabelsErrorType>('labels', getLabels, {
 		staleTime: Infinity
 	})
@@ -32,15 +31,15 @@ export default function SearchLabel(props: SearchLabelProps) {
 		: getLabelsQuery.data
 
 	useEffect(() => {
-		if(searchValue === '') {
+		if (searchValue === '') {
 			searchLabelMutation.reset()
 		}
 	}, [searchValue])
 
 	return (
-		<Modal visible={props.visible} toggle={props.toggle} width='w-72'>
+		<Modal visible={props.visible} toggle={props.toggle}>
 			<div className='p-3 sticky top-0 rounded-lg bg-primary'>
-				<span className='font-semibold'>Label note</span>
+        <Dialog.Title className='font-semibold'>Label note</Dialog.Title>
 				<div className='flex items-center'>
 					<Input
 						className='font-normal'
@@ -50,7 +49,7 @@ export default function SearchLabel(props: SearchLabelProps) {
 							setSearchValue(event.target.value)
 						}}
 						onKeyDown={(event) => {
-							if(event.key === 'Enter' && searchValue !== '') {
+							if (event.key === 'Enter' && searchValue !== '') {
 								searchLabelMutation.mutate()
 							}
 						}}
@@ -65,8 +64,8 @@ export default function SearchLabel(props: SearchLabelProps) {
 				getLabelsQuery.isLoading || searchLabelMutation.isLoading
 					? <div className='flex justify-center p-3'><Spinner /></div>
 					: <div className='px-3 max-h-96 overflow-y-auto'>
-							{ labels != null && <SearchLabelList labels={labels} noteId={props.noteId} /> }
-						</div>
+						{labels != null && <SearchLabelList labels={labels} noteId={props.noteId} />}
+					</div>
 			}
 		</Modal>
 	)
@@ -89,22 +88,22 @@ function SearchLabelItem({ label, noteId }: { label: Label, noteId: string }) {
 	const onSuccess = () => queryClient.invalidateQueries({
 		predicate: query => query.queryKey === 'notes' || query.queryKey === 'labels'
 	})
-	const addLabelMutation = useMutation(() => addLabel({labelId: label.id, noteId}), { onSuccess })
-	const removeLabelMutation = useMutation(() => removeLabel({labelId: label.id, noteId}), { onSuccess })
+	const addLabelMutation = useMutation(() => addLabel({ labelId: label.id, noteId }), { onSuccess })
+	const removeLabelMutation = useMutation(() => removeLabel({ labelId: label.id, noteId }), { onSuccess })
 	const [isChecked, setIsChecked] = useState(false)
 	const firstRender = useRef(true)
 	const [clicked, setClicked] = useState(false)
 
 	useEffect(() => {
-		for(const note of label.notes) {
-			if(note.id === noteId) {
+		for (const note of label.notes) {
+			if (note.id === noteId) {
 				setIsChecked(true)
 			}
 		}
 	}, [label.notes, noteId])
 
 	const submit = useMemo(() => debounce(() => {
-		if(isChecked) {
+		if (isChecked) {
 			addLabelMutation.mutate()
 		} else {
 			removeLabelMutation.mutate()
@@ -112,7 +111,7 @@ function SearchLabelItem({ label, noteId }: { label: Label, noteId: string }) {
 	}, 500), [isChecked])
 
 	useEffect(() => {
-		if(firstRender.current) {
+		if (firstRender.current) {
 			firstRender.current = false
 			return
 		}

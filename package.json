@@ -7,8 +7,10 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.0",
     "@supabase/supabase-js": "^1.21.0",
     "@tailwindcss/forms": "^0.3.3",
+    "clsx": "^1.1.1",
     "jotai": "^1.2.2",
     "lodash": "^4.17.21",
     "react": "^17.0.0",
