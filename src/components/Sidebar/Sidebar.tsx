@@ -17,26 +17,30 @@ const sidebarList = [
 ]
 
 export default function Sidebar() {
-  const [visibleOnActive] = useAtom(sidebarAtom)
+  const [openSidebar] = useAtom(sidebarAtom)
   const [visibleOnHover, setVisibleOnHover] = useAtom(sidebarAtomOnHover)
   const [openEditLabel, setOpenEditLabel] = useState(false)
   const { data, isSuccess } = useQuery('labels', getLabels, {
     staleTime: Infinity
   })
 
-  const toggle = () => setVisibleOnHover(!visibleOnHover)
+  const hoverToggle = () => {
+    if(window.innerWidth > 768) {
+      setVisibleOnHover(!visibleOnHover)
+    }
+  }
 
   return (
     <>
       <nav
         className={clsx(
-          visibleOnActive || visibleOnHover ? 'w-72' : 'w-16',
+          openSidebar || visibleOnHover ? 'w-72' : 'w-16',
           visibleOnHover && 'shadow-lg-darker',
-          visibleOnActive && 'shadow-lg-darker md:shadow-none',
+          openSidebar && 'shadow-lg-darker md:shadow-none',
           'fixed top-14 left-0 bottom-0 pt-4 z-20 duration-200 ease-in-out bg-primary'
         )}
-        onMouseEnter={toggle}
-        onMouseLeave={toggle}
+        onMouseEnter={hoverToggle}
+        onMouseLeave={hoverToggle}
       >
         <ul>
           {

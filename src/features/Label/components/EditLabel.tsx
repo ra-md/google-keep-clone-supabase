@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Check, Edit2, X, Tag, Trash2 } from 'react-feather'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useLocation } from 'react-router-dom'
 import { Dialog } from '@headlessui/react'
 import { toast } from 'react-toastify'
 import Modal from '~/components/Modal'
@@ -94,17 +95,19 @@ function EditLabelItem(props: { label: Label }) {
   const [openUpdateInput, setOpenUpdateInput] = useState(false)
   const [labelName, setLabelName] = useState('')
   const queryClient = useQueryClient()
-  const updateLabelMutation = useMutation(() => updateLabel({ labelName, id: props.label.id }), {
-    onSuccess() {
-      queryClient.invalidateQueries('labels')
-    }
-  })
-  const deleteLabelMutation = useMutation(() => deleteLabel(props.label.id), {
-    onSuccess() {
-      queryClient.invalidateQueries('labels')
-      toast.dark('Label deleted')
-    }
-  })
+  const {pathname} = useLocation()
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      predicate: query => query.queryKey === 'labels'
+        || query.queryKey === 'notes'
+        || query.queryKey === pathname
+    })
+  }
+
+  const updateLabelMutation = useMutation(() => updateLabel({ labelName, id: props.label.id }), { onSuccess })
+
+  const deleteLabelMutation = useMutation(() => deleteLabel(props.label.id), { onSuccess })
 
   function handleUpdateNote() {
     if (labelName !== props.label.label_name) {

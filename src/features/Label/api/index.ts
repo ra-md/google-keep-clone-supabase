@@ -67,6 +67,11 @@ export async function updateLabel({ labelName, id }: { labelName: string, id: st
 }
 
 export async function deleteLabel(id: string) {
+	const user = supabase.auth.user()
+	await supabase.from<NoteLabel>('note_labels')
+		.delete()
+		.eq('creator_id', user?.id!)
+		.eq('label_id', id)
 	const { data, error } = await supabase.from<Label>('labels').delete().eq('id', id)
 
 	if (error) {

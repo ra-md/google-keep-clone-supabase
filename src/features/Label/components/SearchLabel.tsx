@@ -1,14 +1,15 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
+import { Search } from 'react-feather'
+import debounce from 'lodash/debounce'
+import { PostgrestError } from '@supabase/supabase-js'
+import { Dialog } from '@headlessui/react'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import Modal from '~/components/Modal'
 import Input from '~/components/Input'
 import Spinner from '~/components/Spinner'
-import { Search } from 'react-feather'
-import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { getLabels, addLabel, removeLabel, searchLabels } from '../api'
 import { Label } from '../types'
-import debounce from 'lodash/debounce'
-import { PostgrestError } from '@supabase/supabase-js'
-import {Dialog} from '@headlessui/react'
 
 interface SearchLabelProps {
 	visible: boolean
@@ -84,15 +85,22 @@ function SearchLabelList({ labels, noteId }: { labels: Label[], noteId: string }
 }
 
 function SearchLabelItem({ label, noteId }: { label: Label, noteId: string }) {
-	const queryClient = useQueryClient()
-	const onSuccess = () => queryClient.invalidateQueries({
-		predicate: query => query.queryKey === 'notes' || query.queryKey === 'labels'
-	})
-	const addLabelMutation = useMutation(() => addLabel({ labelId: label.id, noteId }), { onSuccess })
-	const removeLabelMutation = useMutation(() => removeLabel({ labelId: label.id, noteId }), { onSuccess })
 	const [isChecked, setIsChecked] = useState(false)
 	const firstRender = useRef(true)
 	const [clicked, setClicked] = useState(false)
+	const queryClient = useQueryClient()
+  const {pathname} = useLocation()
+
+	const onSuccess = () => queryClient.invalidateQueries({
+		predicate: query => query.queryKey === 'notes'
+			|| query.queryKey === 'labels'
+      || query.queryKey === pathname
+	})
+
+	const addLabelMutation = useMutation(() => addLabel({ labelId: label.id, noteId }), { onSuccess })
+	
+	const removeLabelMutation = useMutation(() => removeLabel({ labelId: label.id, noteId }), { onSuccess })
+	
 
 	useEffect(() => {
 		for (const note of label.notes) {

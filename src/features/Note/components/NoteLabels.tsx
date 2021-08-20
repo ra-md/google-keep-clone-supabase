@@ -1,8 +1,9 @@
 import React from 'react'
-import { Label } from '../../Label/types'
-import { X } from 'react-feather'
-import Spinner from '~/components/Spinner'
 import { useMutation, useQueryClient } from 'react-query'
+import { X } from 'react-feather'
+import { useLocation } from 'react-router-dom'
+import Spinner from '~/components/Spinner'
+import { Label } from '../../Label/types'
 import { removeLabel } from '../../Label/api'
 
 interface NoteLabelsProps {
@@ -30,10 +31,14 @@ export default function NoteLabels({ noteLabels, noteId, full = false }: NoteLab
 
 function NoteLabelsItem(props: Label & { noteId: string }) {
 	const queryClient = useQueryClient()
+  const {pathname} = useLocation()
+
 	const deleteLabelMutation = useMutation(() => removeLabel({ labelId: props.id, noteId: props.noteId }), {
 		onSuccess() {
 			queryClient.invalidateQueries({
-				predicate: query => query.queryKey === 'notes' || query.queryKey === 'labels' || query.queryKey === 'notesbylabel'
+				predicate: query => query.queryKey === 'notes'
+					|| query.queryKey === 'labels'
+					|| query.queryKey === pathname
 			})
 		}
 	})

@@ -11,13 +11,11 @@ export default function Header() {
   const [scrollY, setScrollY] = useState(0)
   let border = scrollY > 0 ? 'shadow-lg-darker' : 'border-b'
 
-  function handleSetScrollY() {
-    setScrollY(window.scrollY)
-  }
+  const handleSetScrollY = () => setScrollY(window.scrollY)
 
-  function handleLogout() {
-    supabase.auth.signOut()
-  }
+  const handleLogout = () => supabase.auth.signOut()
+
+  const toggleSidebar = () => setOpenSidebar(!openSidebar)
 
   useEffect(() => {
     window.addEventListener('scroll', handleSetScrollY, { passive: true });
@@ -36,9 +34,7 @@ export default function Header() {
             icon={<Menu />}
             className='justify-self-start'
             aria-label='open menu'
-            onClick={() => {
-              setOpenSidebar(!openSidebar)
-            }}></Button>
+            onClick={toggleSidebar}></Button>
           <div className='col-span-3'>
             <SearchNote />
           </div>
