@@ -2,12 +2,14 @@ import React, { useEffect } from 'react'
 import NoteList from '~/features/Note/components/NoteList'
 import { useQuery } from 'react-query'
 import { searchNotes } from '../api'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import Spinner from '~/components/Spinner'
 
 export default function Search() {
   const params = useParams<{ query: string }>()
-  const { data, isLoading, refetch, isSuccess } = useQuery(['search', params.query], () => searchNotes(params.query), {
+  const {pathname} = useLocation()
+
+  const { data, isLoading, refetch, isSuccess } = useQuery(pathname, () => searchNotes(params.query), {
     staleTime: Infinity
   })
 
