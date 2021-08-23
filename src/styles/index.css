@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #e8eaed;
+  @apply bg-primary;
+}
+
+button:focus {
+  outline: none;
+}
+
+input:focus {
+  outline: none;
+}
+
+textarea {
+  outline: none;
+  resize: none;
+}
+
+.note-list {
+  overflow: hidden;
+  @apply mt-8;
+}
+
+.textarea {
+  @apply h-full bg-transparent w-full placeholder-semibold;
+}
+
+.auth-input {
+  @apply border border-secondary p-2 rounded-md font-normal;
+}
+
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.__react_component_tooltip {
+  padding: 3px 7px!important;
+  border-radius: 7px!important;
+}
+
+.Toastify__close-button {
+  align-self: center!important;
+}
+
+@media (max-width: 768px) {
+  .note-list {
+    width: 100%!important;
+  }
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent rounded-lg;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  @apply bg-transparent rounded-lg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-hover;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-secondary;
+}
+
+@layer utilities {
+  .placeholder-semibold::placeholder {
+    @apply font-semibold
+  }
+}
+
+@layer base {
+  h1 {
+    @apply text-2xl font-bold;
+  }
+  h2 {
+    @apply text-xl font-bold;
+  }
+}
