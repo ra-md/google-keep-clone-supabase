@@ -1,7 +1,11 @@
-import React, { DetailedHTMLProps, InputHTMLAttributes } from 'react'
+import React, { DetailedHTMLProps, InputHTMLAttributes } from "react";
 
-interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-  className?: string
+interface InputProps
+  extends DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {
+  className?: string;
 }
 
 export default function Input({ className, ...props }: InputProps) {
@@ -10,5 +14,5 @@ export default function Input({ className, ...props }: InputProps) {
       className={`h-full my-3 bg-transparent w-full font-semibold ${className}`}
       {...props}
     />
-  )
+  );
 }
